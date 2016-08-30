@@ -1,0 +1,65 @@
+* Collections
+** count == length
+** (first collection) returns the head
+** (second collection) ...
+** (rest collection) returns the tail
+** seq transform any collection to list
+*** if coll is a map the result will be a list of vectors {:k 1} -> ([:k 1]) 
+* List
+** '()
+** linkedlist
+** (= (list 1 2 3) '(1 2 3))
+** conj add at beggining
+* Vector
+** []
+** arraylist
+** (= (vector 1 2 3) [1 2 3] (vec '(1 2 3)))
+** conj add at end
+* Set
+** #{}
+** collection with unique elems
+** (= (set '(1 2 3)) (set [1 2 3]) (hash-set 1 2 3))
+* Map
+** {}
+** hashmap (fast access no order guarantee)
+** (= {:a 2} (hash-map :a 2)) 
+** accessing some key
+*** (:a {:a 1, :b 2})
+*** ((hash-map :a 1, :b 2) :a)
+** conj
+*** (conj {:a 1} {:b 2})
+*** also works 
+**** (conj {:a 1} [:b 2])
+**** (conj {:a 1} {:b 2} [:c 3] [:d 3])
+** assoc and dissoc 
+*** (assoc {:a 1} :b 2, :c 3)
+*** (dissoc {:a 1, :b 2, :c 3} :a :c)
+* Function
+** #() or (fn)
+*** #(+ %1 %2 %3) or (fn [x y z] (+ x y z))
+** currying
+*** (partial f arg)
+**** given (def multiply #(* %1 %2))
+**** (partial (partial multiply 10) 10) is the same #(* 10 10)
+* Chain 
+** ->> arg *fun1* *fun2* *fun3*
+*** adds *arg* as last arg of each funN
+*** (->> (range 0 10) (filter odd?) (map #(* % 10)) (reduce +))
+** -> arg *fun1* *fun2* *fun3*
+*** adds *arg* as first arg of each funN
+*** (-> 100 (/ 2) (+ 7) (* 1.5)) 
+** as-> arg *bind* *fun*
+*** (as-> (range 1 10) x (reduce * x))  
+*** (-> [10 11] (conj 12) (as-> x (if (= (first x) 10) (conj x 13) (reverse x))))
+*** (-> [10 11] (conj 12) (as-> x (map #(* % 5) x)))
+* Atom
+** (atom *value*) 
+** atom is useful to keep state
+*** (def state (atom {}))
+**** state -> #<Atom@77f19378 {}>
+**** @state -> {}
+** updating state
+*** swap! applies a fun with specified args on current state 
+**** (swap! *atom* *fun* *args*)
+*** compare-and-set! change the state of *atom* to the newVal if the oldVal matches the current val of the atom
+**** (compare-and-set! *atom* *oldVal* *newVal*)
